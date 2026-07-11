@@ -129,10 +129,22 @@ const updateItem = async (id, item) => {
     return result;
 };
 
+// Delete clothing item
+const deleteItem = async (id) => {
+
+    const [result] = await db.query(
+        "DELETE FROM clothing_items WHERE id = ?",
+        [id]
+    );
+
+    return result;
+};
+
 module.exports = {
     createItem,
     getAllItems,
     getItemById,
     getItemOwner,
-    updateItem
+    updateItem,
+    deleteItem
 };

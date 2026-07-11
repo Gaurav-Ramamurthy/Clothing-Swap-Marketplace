@@ -171,11 +171,58 @@ const updateItem = async (req, res) => {
 
 };
 
+// Delete Clothing Item
+const deleteItem = async (req, res) => {
+
+    try {
+
+        const { id } = req.params;
+
+        // Check if item exists
+        const owner = await itemModel.getItemOwner(id);
+
+        if (owner.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: "Item not found."
+            });
+        }
+
+        // Check if logged-in user owns the item
+        if (owner[0].user_id !== req.user.id) {
+            return res.status(403).json({
+                success: false,
+                message: "You are not authorized to delete this item."
+            });
+        }
+
+        // Delete item
+        await itemModel.deleteItem(id);
+
+        res.status(200).json({
+            success: true,
+            message: "Item deleted successfully."
+        });
+
+    } catch (error) {
+
+        console.error(error);
+
+        res.status(500).json({
+            success: false,
+            message: "Server Error"
+        });
+
+    }
+
+};
+
 module.exports = {
     addItem,
     getAllItems,
     getItemById,
-    updateItem
+    updateItem,
+    deleteItem
 };
 
 
