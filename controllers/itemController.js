@@ -18,7 +18,6 @@ const addItem = async (req, res) => {
         // Get logged-in user's ID from JWT
         const user_id = req.user.id;
 
-        // Save item
         await itemModel.createItem({
             user_id,
             category_id,
@@ -48,6 +47,33 @@ const addItem = async (req, res) => {
 
 };
 
+// Get All Clothing Items
+const getAllItems = async (req, res) => {
+
+    try {
+
+        const items = await itemModel.getAllItems();
+
+        res.status(200).json({
+            success: true,
+            count: items.length,
+            items
+        });
+
+    } catch (error) {
+
+        console.error(error);
+
+        res.status(500).json({
+            success: false,
+            message: "Server Error"
+        });
+
+    }
+
+};
+
 module.exports = {
-    addItem
+    addItem,
+    getAllItems
 };
