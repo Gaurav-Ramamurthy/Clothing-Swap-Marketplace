@@ -4,14 +4,17 @@ const router = express.Router();
 const authenticateToken = require("../middleware/authMiddleware");
 const itemController = require("../controllers/itemController");
 
-// Get all clothing items (Public)
+// Public Routes
 router.get("/", itemController.getAllItems);
+router.get("/:id", itemController.getItemById);
 
-// Add clothing item (Protected)
-router.post(
-    "/",
+// Protected Routes
+router.post("/", authenticateToken, itemController.addItem);
+
+router.put(
+    "/:id",
     authenticateToken,
-    itemController.addItem
+    itemController.updateItem
 );
 
 module.exports = router;
