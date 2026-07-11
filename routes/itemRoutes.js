@@ -9,7 +9,23 @@ const itemController = require("../controllers/itemController");
 // ============================
 
 // Get all clothing items
-router.get("/", itemController.getAllItems);
+router.get("/", (req, res) => {
+
+    if (
+        req.query.search ||
+        req.query.brand ||
+        req.query.size ||
+        req.query.color ||
+        req.query.category
+    ) {
+
+        return itemController.searchItems(req, res);
+
+    }
+
+    return itemController.getAllItems(req, res);
+
+});
 
 // Get single clothing item
 router.get("/:id", itemController.getItemById);

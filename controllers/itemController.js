@@ -217,12 +217,54 @@ const deleteItem = async (req, res) => {
 
 };
 
+
+// Search and Filter Clothing Items
+const searchItems = async (req, res) => {
+
+    try {
+
+        const {
+            search,
+            brand,
+            size,
+            color,
+            category
+        } = req.query;
+
+        const items = await itemModel.searchItems({
+            search,
+            brand,
+            size,
+            color,
+            category
+        });
+
+        res.status(200).json({
+            success: true,
+            count: items.length,
+            items
+        });
+
+    } catch (error) {
+
+        console.error(error);
+
+        res.status(500).json({
+            success: false,
+            message: "Server Error"
+        });
+
+    }
+
+};
+
 module.exports = {
     addItem,
     getAllItems,
     getItemById,
     updateItem,
-    deleteItem
+    deleteItem,
+    searchItems
 };
 
 

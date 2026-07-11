@@ -140,11 +140,72 @@ const deleteItem = async (id) => {
     return result;
 };
 
+
+// Search and filter clothing items
+const searchItems = async (filters) => {
+
+    let sql = `
+        SELECT
+            clothing_items.id,
+            clothing_items.title,
+            clothing_items.description,
+            clothing_items.size,
+            clothing_items.color,
+            clothing_items.brand,
+            clothing_items.condition_type,
+            clothing_items.availability,
+            clothing_items.created_at,
+            categories.category_name,
+            users.full_name
+        FROM clothing_items
+        INNER JOIN categories
+            ON clothing_items.category_id = categories.id
+        INNER JOIN users
+            ON clothing_items.user_id = users.id
+        WHERE 1=1
+    `;
+
+    const values = [];
+
+    if (filters.search) {
+        sql += " AND clothing_items.title LIKE ?";
+        values.push(`%${filters.search}%`);
+    }
+
+    if (filters.brand) {
+        sql += " AND clothing_items.brand = ?";
+        values.push(filters.brand);
+    }
+
+    if (filters.size) {
+        sql += " AND clothing_items.size = ?";
+        values.push(filters.size);
+    }
+
+    if (filters.color) {
+        sql += " AND clothing_items.color = ?";
+        values.push(filters.color);
+    }
+
+    if (filters.category) {
+        sql += " AND categories.category_name = ?";
+        values.push(filters.category);
+    }
+
+    sql += " ORDER BY clothing_items.created_at DESC";
+
+    const [rows] = await db.query(sql, values);
+
+    return rows;
+};
+
+
 module.exports = {
     createItem,
     getAllItems,
     getItemById,
     getItemOwner,
     updateItem,
-    deleteItem
+    deleteItem,
+    searchItems
 };
