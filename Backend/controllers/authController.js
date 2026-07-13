@@ -58,8 +58,6 @@ const registerUser = async (req, res) => {
 };
 
 
-
-
 // Login User
 const loginUser = async (req, res) => {
 
@@ -78,6 +76,14 @@ const loginUser = async (req, res) => {
         }
 
         const user = users[0];
+
+        // Check if account is active
+        if (!user.is_active) {
+            return res.status(403).json({
+                success: false,
+                message: "Your account has been deactivated. Please contact the administrator."
+            });
+        }
 
         // Compare password
         const isMatch = await bcrypt.compare(password, user.password);

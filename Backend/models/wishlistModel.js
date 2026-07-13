@@ -51,6 +51,7 @@ const getWishlist = async (userId) => {
         INNER JOIN users
             ON clothing_items.user_id = users.id
         WHERE wishlist.user_id = ?
+        AND clothing_items.is_active = TRUE
         ORDER BY wishlist.created_at DESC
     `, [userId]);
 

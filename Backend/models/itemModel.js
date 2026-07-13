@@ -52,6 +52,7 @@ const getAllItems = async () => {
             ON clothing_items.category_id = categories.id
         INNER JOIN users
             ON clothing_items.user_id = users.id
+        WHERE clothing_items.is_active = TRUE
         ORDER BY clothing_items.created_at DESC
     `);
 
@@ -83,16 +84,20 @@ const getItemById = async (id) => {
         INNER JOIN users
             ON clothing_items.user_id = users.id
         WHERE clothing_items.id = ?
+        AND clothing_items.is_active = TRUE
     `, [id]);
 
     return rows;
 };
 
-// Get item owner by item ID
+// Get active item owner by item ID
 const getItemOwner = async (id) => {
 
     const [rows] = await db.query(
-        "SELECT user_id FROM clothing_items WHERE id = ?",
+        `SELECT user_id
+         FROM clothing_items
+         WHERE id = ?
+         AND is_active = TRUE`,
         [id]
     );
 
@@ -129,17 +134,18 @@ const updateItem = async (id, item) => {
     return result;
 };
 
-// Delete clothing item
+// Soft Delete clothing item
 const deleteItem = async (id) => {
 
     const [result] = await db.query(
-        "DELETE FROM clothing_items WHERE id = ?",
+        `UPDATE clothing_items
+         SET is_active = FALSE
+         WHERE id = ?`,
         [id]
     );
 
     return result;
 };
-
 
 // Search and filter clothing items
 const searchItems = async (filters) => {
@@ -163,6 +169,7 @@ const searchItems = async (filters) => {
         INNER JOIN users
             ON clothing_items.user_id = users.id
         WHERE 1=1
+        AND clothing_items.is_active = TRUE
     `;
 
     const values = [];

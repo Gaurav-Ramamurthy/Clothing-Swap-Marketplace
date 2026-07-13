@@ -14,10 +14,14 @@ const notificationRoutes = require("./routes/notificationRoutes");
 const messageRoutes = require("./routes/messageRoutes");
 const reviewRoutes = require("./routes/reviewRoutes");
 const adminRoutes = require("./routes/adminRoutes");
+const swaggerUi = require("swagger-ui-express");
+const swaggerSpec = require("./docs/swagger");
 
 const app = express();
 
 const PORT = process.env.PORT || 3000;
+console.log(swaggerSpec);
+
 
 // Middleware
 app.use(cors());
@@ -35,6 +39,7 @@ app.use("/api/notifications", notificationRoutes);
 app.use("/api/messages", messageRoutes);
 app.use("/api/reviews", reviewRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api-docs", swaggerUi.serve,swaggerUi.setup(swaggerSpec));
 
 // Home Route
 app.get("/", (req, res) => {

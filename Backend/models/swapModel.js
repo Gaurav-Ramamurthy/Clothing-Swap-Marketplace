@@ -1,18 +1,18 @@
 const db = require("../config/db");
 
-// Get clothing item by ID
+// Get active clothing item
 const getItem = async (itemId) => {
 
     const [rows] = await db.query(
         `SELECT *
          FROM clothing_items
-         WHERE id = ?`,
+         WHERE id = ?
+         AND is_active = TRUE`,
         [itemId]
     );
 
     return rows;
 };
-
 // Check for duplicate pending request
 const findPendingRequest = async (requesterItemId, ownerItemId) => {
 
