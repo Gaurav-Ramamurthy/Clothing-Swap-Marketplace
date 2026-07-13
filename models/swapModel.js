@@ -185,6 +185,19 @@ const acceptSwapRequest = async (swapId, requesterItemId, ownerItemId) => {
 
 };
 
+// Reject Swap Request
+const rejectSwapRequest = async (swapId) => {
+
+    const [result] = await db.query(
+        `UPDATE swap_requests
+         SET status = 'Rejected'
+         WHERE id = ?`,
+        [swapId]
+    );
+
+    return result;
+};
+
 module.exports = {
     getItem,
     findPendingRequest,
@@ -192,5 +205,6 @@ module.exports = {
     getSentRequests,
     getReceivedRequests,
     getSwapRequestById,
-    acceptSwapRequest
+    acceptSwapRequest,
+    rejectSwapRequest
 };

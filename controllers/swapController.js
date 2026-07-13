@@ -224,9 +224,67 @@ const acceptSwapRequest = async (req, res) => {
 
 };
 
+// Reject Swap Request
+const rejectSwapRequest = async (req, res) => {
+
+    try {
+
+        const userId = req.user.id;
+        const swapId = req.params.id;
+
+        // Get swap request
+        const swap = await swapModel.getSwapRequestById(swapId);
+
+        if (swap.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: "Swap request not found."
+            });
+        }
+
+        const request = swap[0];
+
+        // Only owner can reject
+        if (request.owner_id !== userId) {
+            return res.status(403).json({
+                success: false,
+                message: "You are not authorized to reject this swap request."
+            });
+        }
+
+        // Only pending requests can be rejected
+        if (request.status !== "Pending") {
+            return res.status(400).json({
+                success: false,
+                message: "This swap request has already been processed."
+            });
+        }
+
+        // Reject request
+        await swapModel.rejectSwapRequest(swapId);
+
+        res.status(200).json({
+            success: true,
+            message: "Swap request rejected successfully."
+        });
+
+    } catch (error) {
+
+        console.error(error);
+
+        res.status(500).json({
+            success: false,
+            message: "Server Error"
+        });
+
+    }
+
+};
+
 module.exports = {
     createSwapRequest,
     getSentRequests,
     getReceivedRequests,
-    acceptSwapRequest
+    acceptSwapRequest,
+    rejectSwapRequest
 };

@@ -32,4 +32,11 @@ router.put(
     swapController.acceptSwapRequest
 );
 
+// Reject Swap Request
+router.put(
+    "/:id/reject",
+    authenticateToken,
+    swapController.rejectSwapRequest
+);
+
 module.exports = router;
