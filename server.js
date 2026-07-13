@@ -11,7 +11,7 @@ const imageRoutes = require("./routes/imageRoutes");
 const wishlistRoutes = require("./routes/wishlistRoutes");
 const swapRoutes = require("./routes/swapRoutes");
 const notificationRoutes = require("./routes/notificationRoutes");
-
+const messageRoutes = require("./routes/messageRoutes");
 
 const app = express();
 
@@ -30,6 +30,7 @@ app.use("/api/items", imageRoutes);
 app.use("/api/wishlist", wishlistRoutes);
 app.use("/api/swaps", swapRoutes);
 app.use("/api/notifications", notificationRoutes);
+app.use("/api/messages", messageRoutes);
 
 // Home Route
 app.get("/", (req, res) => {
