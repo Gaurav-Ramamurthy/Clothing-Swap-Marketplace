@@ -10,6 +10,7 @@ const itemRoutes = require("./routes/itemRoutes");
 const imageRoutes = require("./routes/imageRoutes");
 const wishlistRoutes = require("./routes/wishlistRoutes");
 const swapRoutes = require("./routes/swapRoutes");
+const notificationRoutes = require("./routes/notificationRoutes");
 
 
 const app = express();
@@ -28,6 +29,7 @@ app.use("/api/items", itemRoutes);
 app.use("/api/items", imageRoutes);
 app.use("/api/wishlist", wishlistRoutes);
 app.use("/api/swaps", swapRoutes);
+app.use("/api/notifications", notificationRoutes);
 
 // Home Route
 app.get("/", (req, res) => {

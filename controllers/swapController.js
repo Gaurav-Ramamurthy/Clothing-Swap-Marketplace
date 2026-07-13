@@ -1,4 +1,5 @@
 const swapModel = require("../models/swapModel");
+const notificationModel = require("../models/notificationModel");
 
 // Create Swap Request
 const createSwapRequest = async (req, res) => {
@@ -81,6 +82,10 @@ const createSwapRequest = async (req, res) => {
             requester_item_id,
             owner_item_id
         );
+        await notificationModel.createNotification(
+            ownerItem[0].user_id,
+            "You have received a new swap request."
+        );
 
         res.status(201).json({
             success: true,
@@ -99,6 +104,8 @@ const createSwapRequest = async (req, res) => {
     }
 
 };
+
+
 
 // View Sent Swap Requests
 const getSentRequests = async (req, res) => {
@@ -205,6 +212,11 @@ const acceptSwapRequest = async (req, res) => {
             request.requester_item_id,
             request.owner_item_id
         );
+        await swapModel.acceptSwapRequest(
+            swapId,
+            request.requester_item_id,
+            request.owner_item_id
+        );
 
         res.status(200).json({
             success: true,
@@ -267,6 +279,10 @@ const rejectSwapRequest = async (req, res) => {
             success: true,
             message: "Swap request rejected successfully."
         });
+        await notificationModel.createNotification(
+            request.requester_id,
+            "Your swap request has been rejected."
+        );
 
     } catch (error) {
 
